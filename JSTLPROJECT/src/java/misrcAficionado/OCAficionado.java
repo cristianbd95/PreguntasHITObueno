@@ -27,18 +27,19 @@ public class OCAficionado {
     }
 
     public boolean registrarAficionado(Aficionado aficionado) {
-        boolean bandera = true;
-        String query = "INSERT INTO `aficionado` (`nombre`, `fecha-nacimiento`, `ciudad`, `estadocivil`) VALUES ('" + aficionado.getNombre() + "','" + aficionado.getFechanacimiento()
-                + "', '" + aficionado.getCiudad() + "', '" + aficionado.getEstadocivil() + "')";
+        boolean bandera = false;
+        String query = "INSERT INTO `aficionado` (`nombre`, `fecha-nacimiento`, `ciudad`, `estadocivil`) VALUES ('" + aficionado.getNombre() + "','2020-09-09', '" + aficionado.getCiudad() + "', '" + aficionado.getEstadocivil() + "')";
         String queryClub = null;
-        int x = -1;
+        PreparedStatement sql;
         try {
-            Statement sql = conexion.createStatement();
-            x = sql.executeUpdate(query);
+            sql = conexion.prepareStatement(query);
+            sql.executeUpdate();
             for (int i = 0; i < aficionado.getAficionado_al().size(); i++) {
                 queryClub = "INSERT INTO `clubaficionado` (`idAficionado`, `idClub`) VALUES('" + aficionado.getIdaficionado() + "', '" + aficionado.aficionado_al.get(i) + "')";
-                x = sql.executeUpdate(queryClub);
+                sql = conexion.prepareStatement(queryClub);
+                sql.executeUpdate();
             }
+            bandera = true;
         } catch (SQLException ex) {
             bandera = false;
         }
@@ -66,6 +67,29 @@ public class OCAficionado {
         }
         return club_al;
 
+    }
+    
+    public List<String> mostrarTablaAficionado() {
+        List<String> aficionado_al = new ArrayList<String>();
+        String query = "select * from aficionado;";
+
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+
+        try {
+            ps = conexion.prepareStatement(query);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+
+                aficionado_al.add("<br>" + rs.getString(1)+ "\n <br>" + rs.getString(2)+ "\n <br>" + rs.getString(3)+ "\n<br>" + rs.getString(4)+ "\n<br>" + rs.getString(5));
+            }
+            ps.close();
+
+        } catch (SQLException ex) {
+            aficionado_al = null;
+        }
+
+        return aficionado_al;
     }
 
 }
