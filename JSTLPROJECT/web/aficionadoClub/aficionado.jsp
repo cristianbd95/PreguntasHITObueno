@@ -28,7 +28,11 @@
         int x;
         x = (int) Math.floor(Math.random() * 3 + 2);//2,3,4
         int[] numRand = new int[x];
-
+        
+        //String sBotonSelect = request.getParameter("btoRandom");
+        //session.setAttribute("boton_s", sBotonSelect);
+        
+        
         ArrayList<Integer> list = new ArrayList<Integer>();
         for (int i = 0; i < 4; i++) {
             list.add(new Integer(i)); //0,1,2,3,4
@@ -52,10 +56,11 @@
 </fieldset> 
 <form action="aficionado.jsp" method="-post">
     <input type="submit" name="btoEnviar">
-    <input type="text" name="txtNombre" placeholder="Introduzca un Nombre">
+    <input type="text" name="txtId" placeholder="Introduzca un ID" required> 
+    <input type="text" name="txtNombre" placeholder="Introduzca un Nombre" required> 
     <input type="date" name="dateFechanac">
-    <input type="text" name="txtCiudad" placeholder="Introduzca una Ciudad">
-    <input type="text" name="txtEstadocivil" placeholder="Introduzca Estado Civil">
+    <input type="text" name="txtCiudad" placeholder="Introduzca una Ciudad" required>
+    <input type="text" name="txtEstadocivil" placeholder="Introduzca Estado Civil" required>
 </form>  
 <%
     }
@@ -64,6 +69,7 @@
 
         List<String> aficionado_al = new ArrayList<String>();
         String guardar;
+        String idAficionado = request.getParameter("txtId");
         String nombre = request.getParameter("txtNombre");
         //Date fechanacimiento = new Date(request.getParameter("dateFechanac").trim());
         String ciudad = request.getParameter("txtCiudad");
@@ -76,12 +82,39 @@
             out.println(aficionado_al.get(i));
         }
         out.println(nombre + " " + ciudad + " " + estadocivil);
-        Aficionado aficionado = new Aficionado(7, nombre, new Date(2020 - 10 - 10), ciudad, estadocivil, aficionado_al);
+        Aficionado aficionado = new Aficionado(Integer.parseInt(idAficionado), nombre, new Date(2020 - 10 - 10), ciudad, estadocivil, aficionado_al);
         if (oc.registrarAficionado(aficionado)) {
             out.println("INSERT OK");
         } else {
             out.println("ERROR INSERT");
         }
+    }
+
+    if(request.getParameter("btoMostrar") != null){
+       List<String> mostrar_al = oc.mostrarTablaAficionado();
+
+        for(int i=0; i<mostrar_al.size(); i++){
+            String mostrar = mostrar_al.get(i);
+            out.println(mostrar);
+        }
+        
+    }
+    
+    if(request.getParameter("btoEliminar") != null){
+       %> 
+        <form action="aficionado.jsp" method="post">
+
+            <input type="text" name="txtEliminar" placeholder="Introduzca id a eliminar" required>
+            <input type="submit" name="btoDel" value="Enviar">
+
+        </form>   
+        <%
+        
+    }
+    if(request.getParameter("btoDel") != null){ 
+        String sEliminar = request.getParameter("txtEliminar");
+        oc.eliminarAficionado(Integer.parseInt(sEliminar));
+        out.println("Delete CORRECTO");
     }
 
 
@@ -96,6 +129,8 @@
         <form action="aficionado.jsp" method="post">
 
             <input type="submit" name="btoRandom" value="Seleccionar Clubs">
+            <input type="submit" name="btoMostrar" value="Mostrar">
+            <input type="submit" name="btoEliminar" value="Eliminar">
 
         </form>
     </body>

@@ -34,6 +34,7 @@ public class OCAficionado {
         try {
             sql = conexion.prepareStatement(query);
             sql.executeUpdate();
+            
             for (int i = 0; i < aficionado.getAficionado_al().size(); i++) {
                 queryClub = "INSERT INTO `clubaficionado` (`idAficionado`, `idClub`) VALUES('" + aficionado.getIdaficionado() + "', '" + aficionado.aficionado_al.get(i) + "')";
                 sql = conexion.prepareStatement(queryClub);
@@ -71,7 +72,7 @@ public class OCAficionado {
     
     public List<String> mostrarTablaAficionado() {
         List<String> aficionado_al = new ArrayList<String>();
-        String query = "select * from aficionado;";
+        String query = "select  clubAficionado.idaficionado, aficionado.nombre, clubAficionado.idClub from clubAficionado INNER JOIN aficionado ON aficionado.idaficionado = clubAficionado.idAficionado WHERE aficionado.idaficionado = clubAficionado.idaficionado;";
 
         PreparedStatement ps = null;
         ResultSet rs = null;
@@ -81,7 +82,7 @@ public class OCAficionado {
             rs = ps.executeQuery();
             while (rs.next()) {
 
-                aficionado_al.add("<br>" + rs.getString(1)+ "\n <br>" + rs.getString(2)+ "\n <br>" + rs.getString(3)+ "\n<br>" + rs.getString(4)+ "\n<br>" + rs.getString(5));
+                aficionado_al.add("<br>" + rs.getString(1)+ " " + rs.getString(2)+ " " + rs.getString(3)+ "\n <br>");
             }
             ps.close();
 
@@ -90,6 +91,22 @@ public class OCAficionado {
         }
 
         return aficionado_al;
+    }
+    
+    public int eliminarAficionado(int x){
+        String query = "DELETE FROM aficionado WHERE idaficionado=" + x + ";";
+        String query2 = "DELETE FROM clubAficionado WHERE idAficionado=" + x + ";";
+
+        try {
+            PreparedStatement sql = conexion.prepareStatement(query);
+            sql.executeUpdate();
+            PreparedStatement sql2 = conexion.prepareStatement(query2);
+            sql2.executeUpdate();
+
+        } catch (SQLException ex) { 
+            System.out.println("ERROR DELETE");
+        }
+        return x;
     }
 
 }
