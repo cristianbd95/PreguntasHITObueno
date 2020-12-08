@@ -26,7 +26,7 @@ public class OCAficionado {
         this.conexion = conexion;
     }
 
-    public boolean registrarAficionado(Aficionado aficionado) {
+    public boolean registrarAficionado(Aficionado aficionado, int x) {
         boolean bandera = false;
         String query = "INSERT INTO `aficionado` (`nombre`, `fecha-nacimiento`, `ciudad`, `estadocivil`) VALUES ('" + aficionado.getNombre() + "','2020-09-09', '" + aficionado.getCiudad() + "', '" + aficionado.getEstadocivil() + "')";
         String queryClub = null;
@@ -34,9 +34,8 @@ public class OCAficionado {
         try {
             sql = conexion.prepareStatement(query);
             sql.executeUpdate();
-            
             for (int i = 0; i < aficionado.getAficionado_al().size(); i++) {
-                queryClub = "INSERT INTO `clubaficionado` (`idAficionado`, `idClub`) VALUES('" + aficionado.getIdaficionado() + "', '" + aficionado.aficionado_al.get(i) + "')";
+                queryClub = "INSERT INTO `clubaficionado` (`idAficionado`, `idClub`) VALUES('" + x + "', '" + aficionado.aficionado_al.get(i) + "')";
                 sql = conexion.prepareStatement(queryClub);
                 sql.executeUpdate();
             }
@@ -108,5 +107,28 @@ public class OCAficionado {
         }
         return x;
     }
+    
+        
+    public int sacarIdAficionado() {
+        int idAf = 0;
+        String query = "SELECT * FROM aficionado ORDER BY idaficionado DESC limit 1;";
 
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+
+        try {
+            ps = conexion.prepareStatement(query);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+
+                idAf = rs.getInt(1);
+            }
+            ps.close();
+
+        } catch (SQLException ex) {
+            idAf = 0;
+        }
+
+        return idAf;
+    }
 }
