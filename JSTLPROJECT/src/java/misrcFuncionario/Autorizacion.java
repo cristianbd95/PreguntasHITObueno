@@ -3,6 +3,6 @@ package misrcFuncionario;
 
 
 public interface Autorizacion {
-    public boolean autorizado(String clave, String claveBD);
+    public boolean autorizado(int clave, int claveBD);
     
 }

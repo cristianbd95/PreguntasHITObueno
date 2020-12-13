@@ -1,22 +1,25 @@
 package misrcFuncionario;
 
 public class Director extends Funcionario implements Autorizacion {
-
+    
     public int clave;
 
     @Override
     public double Salario() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return 5000;
+    }
+    
+    public int getClave(int claveBD){
+        return claveBD;
     }
 
-
-
-
     @Override
-    public boolean autorizado(String clave, String claveBD) {
-        if(claveBD != clave){
+    public boolean autorizado(int clave, int claveBD) {
+        if(getClave(claveBD) != clave){
             return false;
         }
         return true;
     }
+
+
 }

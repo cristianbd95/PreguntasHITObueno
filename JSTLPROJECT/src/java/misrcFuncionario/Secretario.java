@@ -1,22 +1,26 @@
+
 package misrcFuncionario;
 
-public class Secretario extends Funcionario implements Autorizacion {
+public class Secretario extends Funcionario implements Autorizacion{
+    
+    public int clave;
 
     @Override
     public double Salario() {
-        return 2450;
+        return 5000;
     }
-
-    public String getClave(String claveBD) {
+    
+    public int getClave(int claveBD){
         return claveBD;
     }
 
     @Override
-    public boolean autorizado(String clave, String claveBD) {
-        if (claveBD != clave) {
+    public boolean autorizado(int clave, int claveBD) {
+        if(getClave(claveBD) != clave){
             return false;
         }
         return true;
     }
+
 
 }

@@ -3,16 +3,12 @@ package misrcFuncionario;
 
 public class Controlador {
     
-    public boolean login(Autorizacion a, String claveBD, String claveINPUT){
-        boolean bandera = false;
-        System.out.println("Ingrese su clave = ");
-        boolean ok = a.autorizado(claveINPUT, claveBD);
+    public boolean login(Autorizacion a, int clave, int claveBD){
+        boolean bandera;
+        boolean ok = a.autorizado(clave, claveBD);
         if(ok == true){
-            System.out.println("Autorizado el acceso al sistema");
-            Funcionario f = (Funcionario) a;
             bandera = true;
         }else{
-            System.out.println("Denegado el acceso al sistema");
             bandera = false;
         }
         return bandera;
